@@ -2,14 +2,14 @@
 
 class CMDParsed:
 
-    def parse_to_json(byte_input):
+    def parser_to_dict(self, byte_input):
         """Parser Byte Date to Dictionary.
 
         Args:
-          byte_input: input date of byte type.
+            byte_input: input date of byte type.
 
         Returns:
-          json_dict: a data dict.
+            parsed_dict: a data dict.
         """
         byte_input = byte_input.decode("utf-8")
         lines = byte_input.splitlines()
@@ -25,3 +25,16 @@ class CMDParsed:
         parsed_dict['Mounted on'] = parsed_dict['Mounted']
         del parsed_dict['Mounted']
         return parsed_dict
+
+    @staticmethod
+    def key_verifier(some_dict, key_list):
+        """Verifier of right keys in dict.
+
+        Args:
+            some_dict: dict which keys to be checked.
+            key_list: list of key that should contain dict.
+        """
+        for key in some_dict.keys():
+            if key not in key_list:
+                del some_dict[key]
+        return some_dict

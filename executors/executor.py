@@ -4,11 +4,11 @@ import subprocess
 
 
 class Executor:
-    def receive_data(send_cmd):
+    def receive_data(self, send_cmd):
         """Process Linux 'df' Commands.
 
         Args:
-            send_cmd: Linux 'df' command.
+            send_cmd: Linux 'df'-type command.
 
         Returns:
             parsed_output: a data dict.

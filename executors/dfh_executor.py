@@ -5,17 +5,15 @@ from parsers import dfh_parser
 
 
 class DFHExecutor(executor.Executor):
-    def receive_data(send_cmd='df -h'):
+    def receive_data(self, send_cmd='df -h'):
         """Execute Linux 'df -h' Command.
-
         Args:
-            send_cmd: Linux 'df' command.
-
+            send_cmd: Linux 'df -h' command.
         Returns:
-            parsed_output: a data dict.
-            parsed_err: an error dict.
+            json_dict: data dict in JSON-format.
         """
-        json_dict = dfh_parser.DFHParser.parse_to_json(
-            executor.Executor.receive_data(send_cmd))
+        byte_input = super().receive_data(send_cmd)
+        parsed_dict = dfh_parser.DFHParser()
+        json_dict = parsed_dict.parser_to_json(byte_input)
 
         return json_dict
