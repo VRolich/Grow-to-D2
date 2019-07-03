@@ -17,10 +17,11 @@ def create_cmd_line_interface():
     parser = argparse.ArgumentParser(description='Please choose one '
                                      'of the following Linux command: '
                                      '"df -h" or "df -i"')
-    parser.add_argument('--human',
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('--human',
                         help='Execute and parse linux system command “df -h”',
                         action='store_true')
-    parser.add_argument('--indone',
+    group.add_argument('--inode',
                         help='Execute and parse linux system command “df -i”',
                         action='store_true')
     args = parser.parse_args()
@@ -31,7 +32,7 @@ def main():
     args = create_cmd_line_interface()
     if args.human:
         json_output = dfh_executor.DFHExecutor.receive_data()
-    elif args.indone:
+    elif args.inode:
         json_output = dfi_executor.DFIExecutor.receive_data()
     else:
         json_output = df_executor.DFExecutor.receive_data()

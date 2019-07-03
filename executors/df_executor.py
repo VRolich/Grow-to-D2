@@ -5,7 +5,7 @@ from parsers import df_parser
 
 
 class DFExecutor(executor.Executor):
-    def receive_data(send_cmd='df'):
+    def receive_data(seld, send_cmd='df'):
         """Execute Linux 'df' Command.
 
         Args:
@@ -15,7 +15,7 @@ class DFExecutor(executor.Executor):
             parsed_output: a data dict.
             parsed_err: an error dict.
         """
-        json_dict = df_parser.DFParser.parse_to_json(
+        json_dict = df_parser.DFParser.parser_to_dict(
             executor.Executor.receive_data(send_cmd))
 
         return json_dict
