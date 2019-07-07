@@ -15,8 +15,8 @@ class DFIExecutor(executor.Executor):
             json_dict: data dict in JSON-format.
         """
 
-        byte_input = super().receive_data(send_cmd)
-        parsed_dict = dfi_parser.DFIParser()
-        json_dict = parsed_dict.parser_to_json(byte_input)
+        dictionary = super().receive_data(send_cmd)
+        parsed_dict = dfi_parser.DFIParser(dictionary)
+        json_dict = parsed_dict.parser_to_json()
 
         return json_dict

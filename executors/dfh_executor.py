@@ -12,8 +12,8 @@ class DFHExecutor(executor.Executor):
         Returns:
             json_dict: data dict in JSON-format.
         """
-        byte_input = super().receive_data(send_cmd)
-        parsed_dict = dfh_parser.DFHParser()
-        json_dict = parsed_dict.parser_to_json(byte_input)
+        dictionary = super().receive_data(send_cmd)
+        parsed_dict = dfh_parser.DFHParser(dictionary)
+        json_dict = parsed_dict.parser_to_json()
 
         return json_dict

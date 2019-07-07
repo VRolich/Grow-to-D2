@@ -6,20 +6,23 @@ from parsers import cmd_parser
 
 
 class DFHParser(cmd_parser.CMDParsed):
-    def parser_to_json(self, byte_input):
-        """Parser Byte Date to JSON for 'df-f' command.
+    def __init__(self, dictionary):
+        super().__init__(dictionary=dictionary)
+        self.json_dict = None
 
-        Args:
-            byte_input: input date of byte type.
+    def parser_to_json(self):
+        """Parser Byte Date to JSON for 'df-f' command.
 
         Returns:
             json_dict: a data dict.
         """
-        dfh_output = super().parser_to_dict(byte_input)
+        self.dictionary = self.form_dict()
 
-        key_list = ['Filesystem', 'Size', 'Used', 'Avail', 'Use%', 'Mounted on']
+        key_list = ['Filesystem', 'Size', 'Used',
+                    'Avail', 'Use%', 'Mounted on']
 
-        dfh_output = cmd_parser.CMDParsed.key_verifier(dfh_output, key_list)
-        json_dict = json.dumps(dfh_output)
+        self.dictionary['result'] = super().key_verifier(
+            self.dictionary['result'], key_list)
+        self.json_dict = json.dumps(self.dictionary)
 
-        return json_dict
+        return self.json_dict

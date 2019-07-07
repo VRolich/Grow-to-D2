@@ -18,7 +18,17 @@ class Executor:
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
         cmd_output, cmd_err = p.communicate()
-        if len(cmd_err) == 0:
-            return cmd_output
+        err = p.returncode
+
+        dictionary = {
+            'status': 'None',
+            'error': 'None',
+            'result': 'None'}
+        if err == 0:
+            dictionary['status'] = 'success'
+            dictionary['result'] = cmd_output
         else:
-            raise Exception(cmd_err)
+            dictionary['status'] = 'failure'
+            dictionary['error'] = cmd_err
+        return dictionary
+

@@ -6,7 +6,11 @@ from parsers import cmd_parser
 
 
 class DFIParser(cmd_parser.CMDParsed):
-    def parser_to_json(self, byte_input):
+    def __init__(self, dictionary):
+        super().__init__(dictionary=dictionary)
+        self.json_dict = None
+
+    def parser_to_json(self):
         """Parser Byte Date to JSON for 'df-i' command.
 
         Args:
@@ -15,11 +19,13 @@ class DFIParser(cmd_parser.CMDParsed):
         Returns:
             json_dict: a data dict.
         """
-        dfi_output = super().parser_to_dict(byte_input)
+        self.dictionary = self.form_dict()
 
-        key_list = ['Filesystem', 'Inodes', 'IUsed', 'IFree', 'IUse%', 'Mounted on']
+        key_list = ['Filesystem', 'Inodes', 'IUsed',
+                    'IFree', 'IUse%', 'Mounted on']
 
-        dfi_output = super().key_verifier(dfi_output, key_list)
-        json_dict = json.dumps(dfi_output)
+        self.dictionary['result'] = super().key_verifier(
+            self.dictionary['result'], key_list)
+        self.json_dict = json.dumps(self.dictionary)
 
-        return json_dict
+        return self.json_dict

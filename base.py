@@ -39,7 +39,6 @@ def main():
     else:
         output = df_executor.DFExecutor()
         json_output = output.receive_data()
-    
 
     print(json_output)
 
