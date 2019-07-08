@@ -16,7 +16,7 @@ class DFHParser(cmd_parser.CMDParsed):
         Returns:
             json_dict: a data dict.
         """
-        self.dictionary = self.form_dict()
+        self.dictionary = self.dict_former()
 
         key_list = ['Filesystem', 'Size', 'Used',
                     'Avail', 'Use%', 'Mounted on']

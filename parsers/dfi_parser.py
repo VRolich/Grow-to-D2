@@ -19,7 +19,7 @@ class DFIParser(cmd_parser.CMDParsed):
         Returns:
             json_dict: a data dict.
         """
-        self.dictionary = self.form_dict()
+        self.dictionary = self.dict_former()
 
         key_list = ['Filesystem', 'Inodes', 'IUsed',
                     'IFree', 'IUse%', 'Mounted on']

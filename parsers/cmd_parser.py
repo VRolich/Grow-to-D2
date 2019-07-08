@@ -54,7 +54,7 @@ class CMDParsed:
                 del some_dict[key]
         return some_dict
 
-    def form_dict(self):
+    def dict_former(self):
         """Form dictionary by parsing one of it's values
         Returns:
             dictionary: updated dict.
