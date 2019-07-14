@@ -1,10 +1,16 @@
 """Parent Class for 'df' Commands Parsing"""
 
-class CMDParsed:
-    def __init__(self, dictionary):
-        self.dictionary = dictionary
 
-    def parser_to_str(self, byte_input):
+class CMDParsed:
+    def __init__(self, cmd_output, cmd_err, err):
+        self._cmd_output = cmd_output
+        self._cmd_err = cmd_err
+        self._err = err
+        self._cmd_execution_result = {}
+        self._json_dict = None
+
+    @staticmethod
+    def parser_to_str(byte_input):
         """Parser Byte Date to sting lines.
         Args:
             byte_input: input date of byte type.
@@ -59,12 +65,13 @@ class CMDParsed:
         Returns:
             dictionary: updated dict.
         """
-        if self.dictionary['status'] == 'success':
-            self.dictionary['result'] = \
-                self.parser_to_dict(self.dictionary['result'])
-        elif self.dictionary['status'] == 'failure':
-            self.dictionary['error'] = \
-                self.parser_to_str(self.dictionary['error'])
+        if self._err == 0:
+            self._cmd_execution_result['status'] = 'success'
+            self._cmd_execution_result['result'] = \
+                self.parser_to_dict(self._cmd_output)
         else:
-            print('Status is undefined')
-        return self.dictionary
+            self._cmd_execution_result['status'] = 'failure'
+            self._cmd_execution_result['error'] = \
+                self.parser_to_str(self._cmd_err)
+
+        return self._cmd_execution_result
