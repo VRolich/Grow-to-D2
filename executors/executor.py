@@ -2,15 +2,12 @@
 
 import subprocess
 
-from parsers import df_parser
-from parsers import dfh_parser
-from parsers import dfi_parser
-
 
 class Executor:
 
-    def __init__(self, cmd):
+    def __init__(self, cmd, parser):
         self.cmd = cmd
+        self.parser = parser
 
     def receive_data(self):
         """Process Linux 'df' Commands.
@@ -28,13 +25,7 @@ class Executor:
         cmd_output, cmd_err = p.communicate()
         err = p.returncode
 
-        if self.cmd == 'df':
-            parsed_dict = df_parser.DFParser(cmd_output, cmd_err, err)
-        elif self.cmd == 'df -h':
-            parsed_dict = dfh_parser.DFHParser(cmd_output, cmd_err, err)
-        elif self.cmd == 'df -i':
-            parsed_dict = dfi_parser.DFIParser(cmd_output, cmd_err, err)
-        json_dict = parsed_dict.parser_to_json()
+        json_dict = self.parser(cmd_output, cmd_err, err).parser_to_json()
         return json_dict
 
 
