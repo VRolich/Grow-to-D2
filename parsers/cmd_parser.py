@@ -1,5 +1,7 @@
 """Parent Class for 'df' Commands Parsing"""
 
+import json
+
 
 class CMDParsed:
     def __init__(self, cmd_output, cmd_err, err):
@@ -7,6 +9,7 @@ class CMDParsed:
         self._cmd_err = cmd_err
         self._err = err
         self._cmd_execution_result = {}
+        self._key_list = None
         self._json_dict = None
 
     @staticmethod
@@ -60,18 +63,22 @@ class CMDParsed:
                 del some_dict[key]
         return some_dict
 
-    def dict_former(self):
-        """Form dictionary by parsing one of it's values
+    def parser_to_json(self):
+        """Form dictionary by parsing one of it's value
+        and convert to JSON format.
         Returns:
-            dictionary: updated dict.
+            _json_dict: JSON dictionary.
         """
         if self._err == 0:
             self._cmd_execution_result['status'] = 'success'
             self._cmd_execution_result['result'] = \
                 self.parser_to_dict(self._cmd_output)
+            self._cmd_execution_result['result'] = self.key_verifier(
+                self._cmd_execution_result['result'], self._key_list)
         else:
             self._cmd_execution_result['status'] = 'failure'
             self._cmd_execution_result['error'] = \
                 self.parser_to_str(self._cmd_err)
 
-        return self._cmd_execution_result
+        self._json_dict = json.dumps(self._cmd_execution_result)
+        return self._json_dict
