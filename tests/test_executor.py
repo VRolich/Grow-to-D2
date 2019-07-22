@@ -2,21 +2,17 @@
 
 import unittest
 
+from parameterized import parameterized
 from executors import executor
-from executors import df_executor
-from executors import dfh_executor
-from executors import  dfi_executor
+from parsers import df_parser, dfh_parser, dfi_parser
+
 
 class TestExecutor(unittest.TestCase):
     """Test executor functions"""
-    def test_receive_data(self):
-        pass
 
-    def test_receive_data_df(self):
-        pass
-
-    def test_receive_data_dfh(self):
-        pass
-
-    def test_receive_data_dfi(self):
-        pass
+    @parameterized.expand(('df', df_parser.DFParser),
+                          ('df -h', dfh_parser.DFHParser),
+                          ('df -i', dfi_parser.DFIParser))
+    def test_receive_data(self, command, parser):
+        test_executor = executor.Executor(command, parser)
+        self.assertIsNotNone(test_executor.receive_data())
