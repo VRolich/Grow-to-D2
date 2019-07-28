@@ -1,49 +1,54 @@
 """Module Tests for Parsers"""
 
+import json
 import unittest
 
 from parameterized import parameterized
-from parsers import cmd_parser
+from parsers import cmd_parser, df_parser, dfh_parser, dfi_parser
 
 
 class TestParser(unittest.TestCase):
     """Test parser functions"""
     @classmethod
     def setUpClass(cls):
-        cls._cmd_parser_object = cmd_parser.CMDParsed(
-            b'Filesystem     1K-blocks     Used Available Use% Mounted on\n'
-            b'udev             4062048        0   4062048   0% /dev\n'
-            b'tmpfs             816832     1404    815428   1% /run\n'
-            b'/dev/sda1       51341792 26827224  21876848  56% /\n'
-            b'tmpfs            4084140    69784   4014356   2% /dev/shm\n'
-            b'tmpfs               5120        4      5116   1% /run/lock\n'
-            b'tmpfs            4084140        0   4084140   0% /sys/fs/cgroup\n'
-            b'/dev/loop0          3840     3840         0 100% /snap/gnome-system-monitor/100\n'
-            b'/dev/loop1         55680    55680         0 100% /snap/core18/1055\n'
-            b'/dev/loop2         15104    15104         0 100% /snap/gnome-characters/296\n'
-            b'/dev/loop3          2432     2432         0 100% /snap/gnome-calculator/180\n'
-            b'/dev/loop4         99840    99840         0 100% /snap/docker/384\n'
-            b'/dev/loop16       144128   144128         0 100% /snap/gnome-3-26-1604/88\n'
-            b'/dev/loop6         14848    14848         0 100% /snap/gnome-logs/37\n'
-            b'/dev/loop8         43904    43904         0 100% /snap/gtk-common-themes/1313\n'
-            b'/dev/loop9         90624    90624         0 100% /snap/core/6964\n'
-            b'/dev/loop12       144128   144128         0 100% /snap/gnome-3-26-1604/90\n'
-            b'/dev/loop14         2304     2304         0 100% /snap/gnome-calculator/260\n'
-            b'/dev/loop13         4224     4224         0 100% /snap/gnome-calculator/406\n'
-            b'/dev/loop15        14976    14976         0 100% /snap/gnome-logs/45\n'
-            b'/dev/loop11        99840    99840         0 100% /snap/docker/321\n'
-            b'/dev/loop17        36224    36224         0 100% /snap/gtk-common-themes/1198\n'
-            b'/dev/loop18         3840     3840         0 100% /snap/gnome-system-monitor/95\n'
-            b'/dev/loop19         1024     1024         0 100% /snap/gnome-logs/61\n'
-            b'/dev/loop20       153600   153600         0 100% /snap/gnome-3-28-1804/63\n'
-            b'/dev/loop21        15104    15104         0 100% /snap/gnome-characters/292\n'
-            b'/dev/loop5        153600   153600         0 100% /snap/gnome-3-28-1804/67\n'
-            b'/dev/loop10        90624    90624         0 100% /snap/core/7270\n'
-            b'tmpfs             816828       36    816792   1% /run/user/1000\n'
-            b'/dev/loop22        55808    55808         0 100% /snap/core18/1066\n',
-            '',
-            0
-        )
+
+        cls._byte_input = \
+            b'Filesystem     1K-blocks     Used Available Use% Mounted on\n'\
+            b'udev             4062048        0   4062048   0% /dev\n'\
+            b'tmpfs             816832     1404    815428   1% /run\n'\
+            b'/dev/sda1       51341792 26827224  21876848  56% /\n'\
+            b'tmpfs            4084140    69784   4014356   2% /dev/shm\n'\
+            b'tmpfs               5120        4      5116   1% /run/lock\n'\
+            b'tmpfs            4084140        0   4084140   0% /sys/fs/cgroup\n'\
+            b'/dev/loop0          3840     3840         0 100% /snap/gnome-system-monitor/100\n'\
+            b'/dev/loop1         55680    55680         0 100% /snap/core18/1055\n'\
+            b'/dev/loop2         15104    15104         0 100% /snap/gnome-characters/296\n'\
+            b'/dev/loop3          2432     2432         0 100% /snap/gnome-calculator/180\n'\
+            b'/dev/loop4         99840    99840         0 100% /snap/docker/384\n'\
+            b'/dev/loop16       144128   144128         0 100% /snap/gnome-3-26-1604/88\n'\
+            b'/dev/loop6         14848    14848         0 100% /snap/gnome-logs/37\n'\
+            b'/dev/loop8         43904    43904         0 100% /snap/gtk-common-themes/1313\n'\
+            b'/dev/loop9         90624    90624         0 100% /snap/core/6964\n'\
+            b'/dev/loop12       144128   144128         0 100% /snap/gnome-3-26-1604/90\n'\
+            b'/dev/loop14         2304     2304         0 100% /snap/gnome-calculator/260\n'\
+            b'/dev/loop13         4224     4224         0 100% /snap/gnome-calculator/406\n'\
+            b'/dev/loop15        14976    14976         0 100% /snap/gnome-logs/45\n'\
+            b'/dev/loop11        99840    99840         0 100% /snap/docker/321\n'\
+            b'/dev/loop17        36224    36224         0 100% /snap/gtk-common-themes/1198\n'\
+            b'/dev/loop18         3840     3840         0 100% /snap/gnome-system-monitor/95\n'\
+            b'/dev/loop19         1024     1024         0 100% /snap/gnome-logs/61\n'\
+            b'/dev/loop20       153600   153600         0 100% /snap/gnome-3-28-1804/63\n'\
+            b'/dev/loop21        15104    15104         0 100% /snap/gnome-characters/292\n'\
+            b'/dev/loop5        153600   153600         0 100% /snap/gnome-3-28-1804/67\n'\
+            b'/dev/loop10        90624    90624         0 100% /snap/core/7270\n'\
+            b'tmpfs             816828       36    816792   1% /run/user/1000\n'\
+            b'/dev/loop22        55808    55808         0 100% /snap/core18/1066\n'\
+
+        cls._cmd_parser_object = cmd_parser.CMDParsed(cls._byte_input, '', 0)
+        cls._df_parser_object = df_parser.DFParser(cls._byte_input, '', 0)
+        cls._dfh_parser_object = dfh_parser.DFHParser(cls._byte_input, '', 0)
+        cls._dfi_parser_object = dfi_parser.DFIParser(cls._byte_input, '', 0)
+
         cls._parsed_dict = {
             'Filesystem': ['udev', 'tmpfs', '/dev/sda1', 'tmpfs', 'tmpfs', 'tmpfs', '/dev/loop0', '/dev/loop1',
                            '/dev/loop2', '/dev/loop3', '/dev/loop4', '/dev/loop16', '/dev/loop6', '/dev/loop8',
@@ -101,7 +106,8 @@ class TestParser(unittest.TestCase):
                                "/snap/gnome-characters/292", "/snap/gnome-3-28-1804/67", "/snap/core/7270",
                                "/run/user/1000", "/snap/core18/1066"]}}
 
-    @parameterized.expand([(['first line', 'second line', 'third line'], b'first line\nsecond line\nthird line')])
+    @parameterized.expand([([['first', 'line'], ['second', 'line'], ['third', 'line']],
+                            b'first line\nsecond line\nthird line')])
     def test_parser_to_str(self, result, test_data):
         self.assertEqual(result, self._cmd_parser_object.parser_to_str(
             test_data))
@@ -110,12 +116,19 @@ class TestParser(unittest.TestCase):
         self.assertDictEqual(self._parsed_dict, self._cmd_parser_object.parser_to_dict(
             self._cmd_parser_object._cmd_output))
 
-    @parameterized.expand([({'a': 1, 'b': 2, 'c': 3}, ('a', 'c')),
-                           ({'vip': 'sdfjkl', 'dip': 324, 'pip': '123', 'tip':12345}, ('pip', 'tip', 'vip'))])
+    @parameterized.expand([({'a': 1, 'b': 2, 'c': 3}, ['a', 'c']),
+                           ({'vip': 'sdfjkl', 'dip': 324, 'pip': '123', 'tip': 12345}, ['pip', 'tip', 'vip'])])
     def test_key_verifier(self, test_dict, result_keys):
-        self.assertEqual(result_keys, self._cmd_parser_object.key_verifier(
-            test_dict, result_keys))
+        self.assertEqual(result_keys, sorted(self._cmd_parser_object.key_verifier(
+            test_dict, result_keys).keys()))
 
-    def test_parser_to_json(self, result_dict):
-        self.assertEqual(result_dict, self._cmd_parser_object.parser_to_json())
-
+    @parameterized.expand([
+        (df_parser.DFParser,),
+        (dfh_parser.DFHParser,),
+        (dfi_parser.DFIParser,)
+    ])
+    def test_parser_to_json(self, parser_object):
+        parser = parser_object(self._byte_input, '', 0)
+        json_string = parser.parser_to_json()
+        actual = json.loads(json_string)
+        self.assertEqual(self._result_dict.keys(), actual.keys())

@@ -15,15 +15,15 @@ from executors import dfi_executor
 
 def create_cmd_line_interface():
     parser = argparse.ArgumentParser(description='Please choose one '
-                                     'of the following Linux command: '
-                                     '"df -h" or "df -i"')
+                                                 'of the following Linux command: '
+                                                 '"df -h" or "df -i"')
     group = parser.add_mutually_exclusive_group()
     group.add_argument('--human',
-                        help='Execute and parse linux system command “df -h”',
-                        action='store_true')
+                       help='Execute and parse linux system command “df -h”',
+                       action='store_true')
     group.add_argument('--inode',
-                        help='Execute and parse linux system command “df -i”',
-                        action='store_true')
+                       help='Execute and parse linux system command “df -i”',
+                       action='store_true')
     args = parser.parse_args()
     return args
 
@@ -43,4 +43,5 @@ def main():
     print(json_output)
 
 
-main()
+if __name__ == '__main__':
+    main()

@@ -19,9 +19,8 @@ class CMDParsed:
             byte_input: input date of byte type.
 
         Returns:
-            parsed_dict: string lines.
+            parsed_dict: string lines list.
         """
-        print(byte_input)
         byte_input = byte_input.decode("utf-8")
         lines = byte_input.splitlines()
         lines = list(line.split() for line in lines)
@@ -47,7 +46,6 @@ class CMDParsed:
         parsed_dict = {column[0]: column[1:] for column in columns}
         parsed_dict['Mounted on'] = parsed_dict['Mounted']
         del parsed_dict['Mounted']
-        print(parsed_dict)
         return parsed_dict
 
     @staticmethod
@@ -60,7 +58,7 @@ class CMDParsed:
         Returns:
             some_dict: verified dict.
         """
-        for key in some_dict.keys():
+        for key in list(some_dict.keys()):
             if key not in key_list:
                 del some_dict[key]
         return some_dict
