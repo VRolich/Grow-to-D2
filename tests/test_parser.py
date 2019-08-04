@@ -36,7 +36,7 @@ class TestParser(unittest.TestCase):
             'Used': ['0', '1404', '26827224', '69784', '4', '0', '3840', '36', '55808'],
             'Available': ['4062048', '815428', '21876848', '4014356', '5116', '4084140', '0', '816792', '0'],
             'Use%': ['0%', '1%', '56%', '2%', '1%', '0%', '100%', '1%', '100%'],
-            'Mounted on': ['/dev', '/run', '/', '/dev/shm', '/run/lock', '/sys/fs/cgroup',
+            'Mounted_on': ['/dev', '/run', '/', '/dev/shm', '/run/lock', '/sys/fs/cgroup',
                            '/snap/gnome-system-monitor/100', '/run/user/1000', '/snap/core18/1066']}
 
         cls._result_dict = {
@@ -48,7 +48,7 @@ class TestParser(unittest.TestCase):
                 "Used": ["0", "1404", "26827224", "69784", "4", "0", "3840", "36", "55808"],
                 "Available": ["4062048", "815428", "21876848", "4014356", "5116", "4084140", "0", "816792", "0"],
                 "Use%": ["0%", "1%", "56%", "2%", "1%", "0%", "100%", "1%", "100%"],
-                "Mounted on": ["/dev", "/run", "/", "/dev/shm", "/run/lock", "/sys/fs/cgroup",
+                "Mounted_on": ["/dev", "/run", "/", "/dev/shm", "/run/lock", "/sys/fs/cgroup",
                                "/snap/gnome-system-monitor/100", "/run/user/1000", "/snap/core18/1066"]}}
 
     @parameterized.expand([([['first', 'line'], ['second', 'line'], ['third', 'line']],

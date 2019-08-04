@@ -22,6 +22,7 @@ class CMDParsed:
             parsed_dict: string lines list.
         """
         byte_input = byte_input.decode("utf-8")
+        byte_input = byte_input.replace("Mounted on", "Mounted_on")
         lines = byte_input.splitlines()
         lines = list(line.split() for line in lines)
         return lines
@@ -44,8 +45,6 @@ class CMDParsed:
             columns.append(column)
 
         parsed_dict = {column[0]: column[1:] for column in columns}
-        parsed_dict['Mounted on'] = parsed_dict['Mounted']
-        del parsed_dict['Mounted']
         return parsed_dict
 
     @staticmethod
